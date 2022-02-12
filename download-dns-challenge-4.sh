@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # ***** Datasets for ICASSP 2022 DNS Challenge 4 - Main (Real-Time) Track *****
 
