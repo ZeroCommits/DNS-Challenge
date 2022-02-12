@@ -163,6 +163,7 @@ def build_audio(is_clean, params, index, audio_samples_length=-1):
 
         # check for clipping, and if found move onto next file
         if is_clipped(input_audio):
+            print('Processing file #{}...'.format(file_num)) # Print to screen 
             clipped_files.append(source_files[idx])
             tries_left -= 1
             continue
@@ -179,7 +180,7 @@ def build_audio(is_clean, params, index, audio_samples_length=-1):
             remaining_length -= silence_len
 
     if tries_left == 0 and not is_clean and 'noisedirs' in params.keys():
-        print("There are not enough non-clipped files in the " + noisedirs[idx_n_dir] + \
+        print("There are not enough non-clipped files in the " + noisedirs[idx_n_dir] + 
               " directory to complete the audio build")
         return [], [], clipped_files, idx
 
@@ -242,7 +243,7 @@ def build_audio2(is_clean, params, index, audio_samples_length=-1):
             remaining_length -= silence_len
 
     if tries_left == 0:
-        print("There are not enough non-clipped files in the " + noisedirs[idx_n_dir] + \
+        print("There are not enough non-clipped files in the " + noisedirs[idx_n_dir] + 
               " directory to complete the audio build")
         return [], [], clipped_files, idx
 
@@ -264,7 +265,7 @@ def gen_audio(is_clean, params, index, audio_samples_length=-1):
         activity_threshold = params['noise_activity_threshold']
 
     while True:
-        audio, source_files, new_clipped_files, index = \
+        audio, source_files, new_clipped_files, index = 
             build_audio(is_clean, params, index, audio_samples_length)
 
         clipped_files += new_clipped_files
@@ -299,7 +300,7 @@ def gen_audio2(is_clean, params, index, audio_samples_length=-1):
         activity_threshold = params['noise_activity_threshold']
 
     while True:
-        audio, source_files, new_clipped_files, index = \
+        audio, source_files, new_clipped_files, index = 
             build_audio2(is_clean, params, index, audio_samples_length)
 
         clipped_files += new_clipped_files
@@ -373,7 +374,7 @@ def main_gen(params):
 
     while file_num <= params['fileindex_end']:
         # generate clean speech
-        #clean, clean_sf, clean_cf, clean_laf, clean_index = \
+        #clean, clean_sf, clean_cf, clean_laf, clean_index = 
         #    gen_audio(True, params, clean_index)
         spk_index = random.randint(0,len(params['cleanfilenames'])-1)   
 
@@ -406,12 +407,12 @@ def main_gen(params):
         for chose_primary in chosen_clean_reverb:
             index2 = random.randint(0,len(params['cleanfilenames2'])-1)  
 
-            clean2, clean_sf, clean_cf, clean_laf, clean_index = \
+            clean2, clean_sf, clean_cf, clean_laf, clean_index = 
                 gen_audio2(True, params, index2, chose_primary.shape[0])
             
             noise_index = random.randint(0,len(params['noisefilenames'])-1)
             # generate noise
-            noise, noise_sf, noise_cf, noise_laf, noise_index = \
+            noise, noise_sf, noise_cf, noise_laf, noise_index = 
                 gen_audio(False, params, noise_index, chose_primary.shape[0])
 
             # if specified, use specified SNR value
@@ -442,18 +443,18 @@ def main_gen(params):
             # unexpected clipping
             #if is_clipped(clean_snr) or is_clipped(noise_snr2) or is_clipped(noisy_snr2):
             if is_clipped(clean_snr) or is_clipped(noisy_snr):
-                print("Warning: File #" + str(file_num) + " has unexpected clipping, " + \
+                print("Warning: File #" + str(file_num) + " has unexpected clipping, " + 
                     "returning without writing audio to disk")
                 continue
 
             if is_clipped(clean_snr2) or is_clipped(noisy_snr2):
-                print("Warning: File #" + str(file_num) + " has unexpected clipping, " + \
+                print("Warning: File #" + str(file_num) + " has unexpected clipping, " + 
                     "returning without writing audio to disk")
                 continue
 
 
             if is_clipped(clean_snr3) or is_clipped(noisy_snr3):
-                print("Warning: File #" + str(file_num) + " has unexpected clipping, " + \
+                print("Warning: File #" + str(file_num) + " has unexpected clipping, " + 
                     "returning without writing audio to disk")
                 continue
 
@@ -467,7 +468,7 @@ def main_gen(params):
             noise_source_filenamesonly = [i[:-4].split(os.path.sep)[-1] for i in noise_sf]
             noise_files_joined = hyphen.join(noise_source_filenamesonly)[:MAXFILELEN]
 
-            noisyfilename = 'primary_noisy_fileid_' + str(file_num) + '_' + clean_files_joined + '_' + noise_files_joined + '_snr' + \
+            noisyfilename = 'primary_noisy_fileid_' + str(file_num) + '_' + clean_files_joined + '_' + noise_files_joined + '_snr' + 
                             str(snr) + '_tl' + str(target_level) + '.wav'
 
             cleanfilename = 'clean_fileid_'+str(file_num)+'.wav'
@@ -477,7 +478,7 @@ def main_gen(params):
             cleanpath = os.path.join(params['clean_proc_dir'], cleanfilename)
             noisepath = os.path.join(params['noise_proc_dir'], noisefilename)
 
-            noisyfilename2 = 'ps_noisy_fileid_'+ str(file_num) + '_' +  clean_files_joined + '_' + noise_files_joined + '_snr' + \
+            noisyfilename2 = 'ps_noisy_fileid_'+ str(file_num) + '_' +  clean_files_joined + '_' + noise_files_joined + '_snr' + 
                             str(snr) + '_tl' + str(target_level) + '.wav'
             cleanfilename2 = 'ps_clean_fileid_'+str(file_num)+'.wav'
             noisefilename2 = 'ps_noise_fileid_'+str(file_num)+'.wav'
@@ -486,7 +487,7 @@ def main_gen(params):
             cleanpath2 = os.path.join(params['clean_proc_dir'], cleanfilename2)
             noisepath2 = os.path.join(params['noise_proc_dir'], noisefilename2)
 
-            noisyfilename3 = 'psn_noisy_fileid_' + str(file_num) + '_' +clean_files_joined + '_' + noise_files_joined + '_snr' + \
+            noisyfilename3 = 'psn_noisy_fileid_' + str(file_num) + '_' +clean_files_joined + '_' + noise_files_joined + '_snr' + 
                             str(snr) + '_tl' + str(target_level) + '.wav'
             cleanfilename3 = 'psn_clean_fileid_'+str(file_num)+'.wav'
             noisefilename3 = 'psn_noise_fileid_'+str(file_num)+'.wav'
@@ -525,7 +526,7 @@ def main_gen(params):
             #     except Exception as e:
             #         print(str(e))
 
-    return clean_source_files, clean_clipped_files, clean_low_activity_files, \
+    return clean_source_files, clean_clipped_files, clean_low_activity_files, 
                 noise_source_files, noise_clipped_files, noise_low_activity_files
 
 def main_body():
@@ -692,7 +693,7 @@ def main_body():
         params['noisedirs'] = noisedirs
 
     # Call main_gen() to generate audio
-    clean_source_files, clean_clipped_files, clean_low_activity_files, \
+    clean_source_files, clean_clipped_files, clean_low_activity_files, 
     noise_source_files, noise_clipped_files, noise_low_activity_files = main_gen(params)
 
     # Create log directory if needed, and write log files of clipped and low activity files
@@ -700,7 +701,7 @@ def main_body():
 
     utils.write_log_file(log_dir, 'source_files.csv', clean_source_files + noise_source_files)
     utils.write_log_file(log_dir, 'clipped_files.csv', clean_clipped_files + noise_clipped_files)
-    utils.write_log_file(log_dir, 'low_activity_files.csv', \
+    utils.write_log_file(log_dir, 'low_activity_files.csv', 
                          clean_low_activity_files + noise_low_activity_files)
 
     # Compute and print stats about percentange of clipped and low activity files
@@ -712,12 +713,12 @@ def main_body():
     pct_clean_low_activity = round(len(clean_low_activity_files)/total_clean*100, 1)
     pct_noise_low_activity = round(len(noise_low_activity_files)/total_noise*100, 1)
 
-    print("Of the " + str(total_clean) + " clean speech files analyzed, " + \
-          str(pct_clean_clipped) + "% had clipping, and " + str(pct_clean_low_activity) + \
-          "% had low activity " + "(below " + str(params['clean_activity_threshold']*100) + \
+    print("Of the " + str(total_clean) + " clean speech files analyzed, " + 
+          str(pct_clean_clipped) + "% had clipping, and " + str(pct_clean_low_activity) + 
+          "% had low activity " + "(below " + str(params['clean_activity_threshold']*100) + 
           "% active percentage)")
-    print("Of the " + str(total_noise) + " noise files analyzed, " + str(pct_noise_clipped) + \
-          "% had clipping, and " + str(pct_noise_low_activity) + "% had low activity " + \
+    print("Of the " + str(total_noise) + " noise files analyzed, " + str(pct_noise_clipped) + 
+          "% had clipping, and " + str(pct_noise_low_activity) + "% had low activity " + 
           "(below " + str(params['noise_activity_threshold']*100) + "% active percentage)")
 
 if __name__ == '__main__':
@@ -1022,7 +1023,7 @@ if __name__ == '__main__':
             remaining_length -= silence_len
 
     if tries_left == 0 and not is_clean and 'noisedirs' in params.keys():
-        print("There are not enough non-clipped files in the " + noisedirs[idx_n_dir] + \
+        print("There are not enough non-clipped files in the " + noisedirs[idx_n_dir] + 
               " directory to complete the audio build")
         return [], [], clipped_files, idx
 
@@ -1100,7 +1101,7 @@ if __name__ == '__main__':
             remaining_length -= silence_len
 
     if tries_left == 0 and not is_clean and 'noisedirs' in params.keys():
-        print("There are not enough non-clipped files in the " + noisedirs[idx_n_dir] + \
+        print("There are not enough non-clipped files in the " + noisedirs[idx_n_dir] + 
               " directory to complete the audio build")
         return [], [], clipped_files, idx
 
@@ -1121,7 +1122,7 @@ def gen_audio(is_clean, params, index, audio_samples_length=-1):
         activity_threshold = params['noise_activity_threshold']
 
     while True:
-        audio, source_files, new_clipped_files, index = \
+        audio, source_files, new_clipped_files, index = 
             build_audio(is_clean, params, index, audio_samples_length)
 
         clipped_files += new_clipped_files
@@ -1154,7 +1155,7 @@ def gen_audio(is_clean, params, index, audio_samples_length=-1):
         activity_threshold = params['noise_activity_threshold']
 
     while True:
-        audio, source_files, new_clipped_files, index = \
+        audio, source_files, new_clipped_files, index = 
             build_audio2(is_clean, params, index, audio_samples_length)
 
         clipped_files += new_clipped_files
